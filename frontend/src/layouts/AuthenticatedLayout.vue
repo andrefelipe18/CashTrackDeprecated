@@ -7,10 +7,8 @@ const store = useUsers()
 
 const auth = store.authUser
 
-onBeforeMount(() => {
-    if (!store.hasUserData) {
-        store.getData()
-    }
+onBeforeMount(() => {   
+    store.getData()    
 })
 
 const submitLogout = () => {

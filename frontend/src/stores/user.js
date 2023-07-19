@@ -23,7 +23,7 @@ export const useUsers = defineStore('users', {
         getData() {
             axios
                 .get('/api/user')
-                .then(response => {
+                .then(response => {                    
                     this.userData = response.data
                 })
                 .catch(error => {
