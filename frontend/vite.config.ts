@@ -9,7 +9,7 @@ import { unheadVueComposablesImports } from '@unhead/vue'
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
-    port: 3053,
+    port: 3000,
   },
   plugins: [
     vue(),

@@ -7,7 +7,12 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * A tabela "budgets" é usada para gerenciar os orçamentos
+     * mensais para diferentes categorias de despesas.
+     * Cada registro na tabela representa um orçamento específico para uma determinada
+     * categoria de gastos para um determinado usuário.
+     * Essa tabela é útil para permitir que os usuários definam metas de gastos mensais
+     * para diferentes áreas de suas finanças e acompanhem o cumprimento dessas metas ao longo do tempo.
      */
     public function up(): void
     {
