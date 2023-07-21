@@ -24,17 +24,18 @@ class TransactionController extends Controller
     {
         $user = $request->user();
 
+        //Converte o valor para centavos
         $amount = $request->input('amount');
         $total_amount = $amount * 100;
         $request->merge([
             'amount' => $total_amount
         ]);
 
-        //Verifica se foi uma receita (positivo) ou uma despesa (negativo)
-        if($request->input('amount') > 0){
-           $user->total_amount += $total_amount;
-        } else {
-            $user->total_amount -= $total_amount;
+        //Se o valor da categoria for 1, então é uma receita e deve ser uma soma, se for maior que 1, então é uma despesa e deve ser uma subtração
+        if($request->input('category_id') == 1){
+            $user->total_amount = $user->total_amount + $total_amount;
+        }else{
+            $user->total_amount = $user->total_amount - $total_amount;
         }
 
         $user->save();

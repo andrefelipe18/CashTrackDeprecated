@@ -32,7 +32,7 @@ const greeting = computed(() => {
                         <span v-if="isVisible">
                             {{ user.total_amount }}
                         </span>
-                        <span v-else>
+                        <span v-else class="mt-2">
                             ********
                         </span>
 

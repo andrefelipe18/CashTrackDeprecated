@@ -36,8 +36,6 @@ class UserController extends Controller
     public function show(Request $request)
     {
         $user = $request->user();
-        $user->total_amount = $user->total_amount / 100;
-
         return new UserResource($user);
     }
 

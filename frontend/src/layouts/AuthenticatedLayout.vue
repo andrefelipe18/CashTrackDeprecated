@@ -75,7 +75,7 @@ const submitLogout = () => {
 
                                     <template #content>
                                         <DropdownLink @click="submitLogout">
-                                            Log Out
+                                            Sair
                                         </DropdownLink>
                                     </template>
                                 </Dropdown>
