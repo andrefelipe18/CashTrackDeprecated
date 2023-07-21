@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->integer('amount');
             $table->string('description');
-            $table->boolean('is_recurring');
-            $table->string('recurring_frequency');
+            $table->char('is_recurring', 1)->default('N');
+            $table->string('recurring_frequency')->nullable()->default(null);
             $table->timestamps();
         });
     }

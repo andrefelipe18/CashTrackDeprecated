@@ -24,7 +24,7 @@ export const useUsers = defineStore('users', {
             axios
                 .get('/api/user')
                 .then(response => {                    
-                    this.userData = response.data
+                    this.userData = response.data.data
                 })
                 .catch(error => {
                     if (error.response.status !== 409) throw error
