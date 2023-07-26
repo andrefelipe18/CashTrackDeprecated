@@ -1,6 +1,7 @@
 import axios from '@/lib/axios'
 import { useStorage } from '@vueuse/core'
 import { defineStore, acceptHMRUpdate } from 'pinia'
+import { useTransactions } from './transactions';
 
 const csrf = () => axios.get('/sanctum/csrf-cookie');
 
@@ -136,9 +137,13 @@ export const useUsers = defineStore('users', {
             await axios
                 .post('/logout')
                 .then(() => {
+                    const transaction = useTransactions()
+
                     this.$reset()
                     this.userData = {}
                     this.authStatus = []
+                    
+                    localStorage.clear()
 
                     this.router.push({ name: 'welcome' })
                 })

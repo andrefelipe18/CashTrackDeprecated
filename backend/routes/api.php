@@ -21,6 +21,7 @@ Route::middleware(['auth:sanctum'])->get('/user', [UserController::class, 'show'
 
 
 Route::get('/transactions', [TransactionController::class, 'index']);
+Route::get('/transactions/monthly', [TransactionController::class, 'monthlyTransactions']);
 Route::post('/transactions', [TransactionController::class, 'store']);
 Route::get('/transactions/{id}', [TransactionController::class, 'show']);
 Route::put('/transactions/{id}', [TransactionController::class, 'update']);

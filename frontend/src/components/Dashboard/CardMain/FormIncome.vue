@@ -12,7 +12,10 @@ const form = ref({
     description: '',    
 });
 
+const loading = ref(false);
+
 const addIncome = async () => {
+    loading.value = true;
     await transactions.createTransaction(form.value);
     form.value = {
         category_id: 1,
@@ -20,7 +23,15 @@ const addIncome = async () => {
         user_id: users.userData.id,    
         description: '',    
     };
+
+    loading.value = false;
+    const modal = document.getElementById('income');
+    modal.close();
+    
+    users.getData(); //Att user data
+        
 };
+
 </script>
 <template>
     <form action="POST">
@@ -36,7 +47,8 @@ const addIncome = async () => {
         </label>
         <textarea class="textarea textarea-md bg-primary-content textarea-accent" placeholder="......" v-model="form.description" required></textarea>    
         </div>
-        <button class="btn btn-success text-primary-content mt-4" @click.prevent="addIncome()">Salvar</button>
+        <button class="btn btn-success text-primary-content mt-4" @click.prevent="addIncome()" v-if="!loading">Salvar</button>
+        <button class="btn btn-success text-primary-content mt-4" v-else><span class="loading loading-dots loading-lg"></span></button>
     </form>
 </template>
 <style scoped>

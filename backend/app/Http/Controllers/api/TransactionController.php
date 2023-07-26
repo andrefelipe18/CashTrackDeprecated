@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
@@ -23,15 +24,13 @@ class TransactionController extends Controller
     public function store(Request $request)
     {
         $user = $request->user();
-
-        //Converte o valor para centavos
+       
         $amount = $request->input('amount');
         $total_amount = $amount * 100;
         $request->merge([
             'amount' => $total_amount
         ]);
 
-        //Se o valor da categoria for 1, então é uma receita e deve ser uma soma, se for maior que 1, então é uma despesa e deve ser uma subtração
         if($request->input('category_id') == 1){
             $user->total_amount = $user->total_amount + $total_amount;
         }else{
@@ -42,6 +41,47 @@ class TransactionController extends Controller
 
         $transaction = $user->transactions()->create($request->all());
         return response()->json($transaction);
+    }
+
+    public function monthlyTransactions(Request $request)
+    {
+        $user = $request->user();
+
+        $transactions = [
+            'incomes' => [],
+            'expenses' => []
+        ];
+
+
+        $first_day = Carbon::now()->firstOfMonth()->format('Y-m-d H:i:s');
+        $last_day = Carbon::now()->lastOfMonth()->format('Y-m-d H:i:s');
+
+        $incomes = $user->transactions()->where('category_id', 1)->whereBetween('created_at', [$first_day, $last_day])->get();
+        $expenses = $user->transactions()->where('category_id', '>', 1)->whereBetween('created_at', [$first_day, $last_day])->get();
+
+        foreach($incomes as $income){
+            $transactions['incomes'][] = [
+                'id' => $income->id,
+                'amount' => $income->amount,
+                'description' => $income->description,
+                'category_id' => $income->category_id,
+                'created_at' => $income->created_at->format('Y-m-d H:i:s'),
+                'updated_at' => $income->updated_at->format('Y-m-d H:i:s'),
+            ];
+        }
+
+        foreach($expenses as $expense){
+            $transactions['expenses'][] = [
+                'id' => $expense->id,
+                'amount' => $expense->amount,
+                'description' => $expense->description,
+                'category_id' => $expense->category_id,
+                'created_at' => $expense->created_at->format('Y-m-d H:i:s'),
+                'updated_at' => $expense->updated_at->format('Y-m-d H:i:s'),
+            ];
+        }
+
+        return response()->json($transactions);
     }
 
     /**

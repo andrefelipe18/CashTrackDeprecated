@@ -4,6 +4,7 @@ import { useTransactions } from '@/stores/transactions';
 const store = useTransactions();
 
 const modal = ref('');
+const modalOpen = computed(() => modal.value !== '');
 
 const toggleModal = (type) => {    
     modal.value = type;    
@@ -28,6 +29,6 @@ const toggleModal = (type) => {
             </button>
         </div>
         
-        <ModalQuickAccess :id="modal"></ModalQuickAccess>
+        <ModalQuickAccess :id="modal" v-if="modalOpen"></ModalQuickAccess>
     </div>
 </template>

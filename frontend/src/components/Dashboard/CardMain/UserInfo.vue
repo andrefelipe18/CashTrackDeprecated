@@ -1,8 +1,31 @@
-<script setup>
+<script async setup>
 import { useUsers } from '@/stores/user'
+import { useTransactions } from '@/stores/transactions';
 
 const users = useUsers();
-const user = users.userData;
+const transactions = useTransactions();
+
+const user = computed(() => {
+    return users.userData;
+});
+
+const monthExpese = computed(() => {
+    let total = 0
+    transactions.expenses.forEach(income => {
+        total += income.amount
+    })
+
+    return total/100;
+});
+
+const monthIncome = computed(() => {
+    let total = 0
+    transactions.incomes.forEach(income => {
+        total += income.amount
+    })
+
+    return total/100;
+});
 
 const isVisible = ref(false);
 
@@ -49,11 +72,11 @@ const greeting = computed(() => {
         <div class="bot-user-info mt-4 flex">
             <div class="bg-primary-content shadow-xl p-5 rounded-xl ml-28 w-fit border border-emerald-400">
                 <h1 class="text-lg text-gray-800 text-center">Receita mensal</h1>
-                <p class="text-lg text-emerald-400 text-center font-semibold">{{ user.total_amount }}</p>
+                <p class="text-lg text-emerald-400 text-center font-semibold">R${{ monthIncome }}</p>
             </div>
             <div class="bg-primary-content shadow-xl p-5 rounded-xl w-fit ml-2 border border-red-400">
                 <h1 class="text-lg text-gray-800 text-center">Despesa mensal</h1>
-                <p class="text-lg text-red-400 text-center font-semibold">{{ user.total_amount }}</p>
+                <p class="text-lg text-red-400 text-center font-semibold">R${{ monthExpese }}</p>
             </div>
             <div class="bg-primary-content shadow-xl p-5 rounded-xl w-fit ml-2 border border-yellow-400 flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill="#facc15" fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61l4.15-5.073a.5.5 0 0 1 .704-.07Z"/></svg>

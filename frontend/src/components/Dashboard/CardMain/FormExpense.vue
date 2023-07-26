@@ -14,7 +14,9 @@ const form = ref({
     description: '',    
 });
 
-const addExpense = async () => {    
+const loading = ref(false);
+const addExpense = async () => {   
+    loading.value = true; 
     await transactions.createTransaction(form.value);
     form.value = {
         category_id: null,
@@ -22,6 +24,13 @@ const addExpense = async () => {
         user_id: users.userData.id,    
         description: '',    
     };
+
+    loading.value = false;
+    
+    const modal = document.getElementById('expense');
+    modal.close();
+    
+    users.getData(); //Att user data        
 };
 
 onMounted(async () => {    
@@ -55,7 +64,8 @@ onMounted(async () => {
         </label>
         <textarea v-model="form.description" class="textarea textarea-md bg-primary-content textarea-accent" placeholder="......" required></textarea>    
         </div>
-        <button class="btn btn-success text-primary-content mt-4" @click.prevent="addExpense()">Salvar</button>
+        <button class="btn btn-success text-primary-content mt-4" @click.prevent="addExpense()" v-if="!loading">Salvar</button>
+        <button class="btn btn-success text-primary-content mt-4" v-else><span class="loading loading-dots loading-lg"></span></button>
     </form>
 </template>
 <style scoped>
