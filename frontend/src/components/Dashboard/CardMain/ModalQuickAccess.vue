@@ -14,7 +14,7 @@ const props = defineProps({
             </div>
             <div v-else-if="id == 'expense'">
                 <FormExpense></FormExpense>
-            </div>
+            </div>                           
         </form>
         <form method="dialog" class="modal-backdrop">
             <button>close</button>

@@ -36,6 +36,12 @@ export const useTransactions = defineStore('transactions', {
                 this.incomes = response.data.incomes
                 this.expenses = response.data.expenses
             })
+        },
+        async deleteTransaction(id){
+            await axios.delete(`/api/transactions/${id}`).then(response => {
+                this.transactions = this.transactions.filter(transaction => transaction.id !== id)
+                this.monthTransactions()
+            })
         }
     },
 

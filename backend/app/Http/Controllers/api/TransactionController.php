@@ -24,7 +24,7 @@ class TransactionController extends Controller
     public function store(Request $request)
     {
         $user = $request->user();
-       
+
         $amount = $request->input('amount');
         $total_amount = $amount * 100;
         $request->merge([
@@ -103,8 +103,27 @@ class TransactionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
-        //
+        //Remove a transação
+        $user = $request->user();
+
+        $transaction = $user->transactions()->find($id);
+
+        if(!$transaction){
+            return response()->json(['error' => 'Transaction not found'], 404);
+        }
+
+        if($transaction->category_id == 1){
+            $user->total_amount = $user->total_amount - $transaction->amount;
+        }else{
+            $user->total_amount = $user->total_amount + $transaction->amount;
+        }
+
+        $user->save();
+
+        $transaction->delete();
+
+        return response()->json(['success' => true]);
     }
 }
